@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { getBotReply } from './bot';
+/** @format */
+
+import { useState } from "react";
+import { getBotReply } from "./bot";
 
 export default function App() {
   const [messages, setMessages] = useState([
-    { from: 'bot', text: 'Hi! I am a simple chatbot. Say hello.' },
+    { from: "bot", text: "Hi! I am a simple chatbot. Say hello." },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   const send = (e) => {
     e.preventDefault();
@@ -13,15 +15,15 @@ export default function App() {
     if (!text) return;
     setMessages((prev) => [
       ...prev,
-      { from: 'user', text },
-      { from: 'bot', text: getBotReply(text) },
+      { from: "user", text },
+      { from: "bot", text: getBotReply(text) },
     ]);
-    setInput('');
+    setInput("");
   };
 
   return (
     <div className="chat">
-      <header className="chat-header">React Chatbot</header>
+      <header className="chat-header">React Chatbot123</header>
       <div className="chat-body">
         {messages.map((m, i) => (
           <div key={i} className={`msg ${m.from}`}>
