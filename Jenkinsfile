@@ -36,5 +36,25 @@ pipeline {
         sh 'docker push $IMAGE:latest'
       }
     }
+    stage('Deploy to dev') {
+      steps {
+        sh '''
+          docker pull $IMAGE:$TAG
+          docker rm -f chatbot-dev || true
+          docker run -d --name chatbot-dev -p 8081:80 --restart=always $IMAGE:$TAG
+        '''
+      }
+    }
+    stage('Smoke test') {
+      steps {
+        sh 'sleep 3 && curl -fsS http://localhost:8081 > /dev/null && echo "App is up"'
+      }
+    }
+  }
+
+  post {
+    success { echo "Deployed ${IMAGE}:${TAG} -> http://localhost:8081" }
+    failure { echo 'Pipeline failed - open the red stage and read its log' }
+    always  { sh 'docker image prune -f || true' }
   }
 }
