@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <div className="chat">
-      <header className="chat-header">React Chatbot123</header>
+      <header className="chat-header">React Chatbot</header>
       <div className="chat-body">
         {messages.map((m, i) => (
           <div key={i} className={`msg ${m.from}`}>
