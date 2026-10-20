@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    IMAGE = "react-chatbot"
-    TAG   = "${env.BUILD_NUMBER}"
+    // Jenkins doesn't load your shell's PATH, so tell it where node and docker are
+    PATH = "/Users/admin/.nvm/versions/node/v20.19.5/bin:/usr/local/bin:/opt/homebrew/bin:/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
   }
 
   stages {
@@ -11,29 +11,10 @@ pipeline {
       steps { checkout scm }
     }
     stage('Install') {
-      steps { sh 'npm ci' }
-    }
-    stage('Test') {
-      steps { sh 'npm test' }
-    }
-    stage('Build') {
-      steps { sh 'npm run build' }
-    }
-    stage('Docker Build') {
-      steps { sh 'docker build -t $IMAGE:$TAG -t $IMAGE:latest .' }
-    }
-    stage('Deploy') {
       steps {
-        sh '''
-          docker rm -f react-chatbot || true
-          docker run -d --name react-chatbot -p 8080:80 $IMAGE:latest
-        '''
+        sh 'node -v && npm -v && docker -v'
+        sh 'npm ci'
       }
     }
-  }
-
-  post {
-    success { echo 'Deployed: http://localhost:8080' }
-    failure { echo 'Pipeline failed' }
   }
 }
